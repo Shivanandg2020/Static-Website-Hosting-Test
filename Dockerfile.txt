@@ -1,0 +1,16 @@
+# Stage 1: Fetch the static website files from GitHub
+FROM alpine/git as git
+WORKDIR /app
+RUN git clone https://github.com/Shivanandg2020/Static-Website-Hosting-Test.git .
+
+# Stage 2: Create the final image with a web server
+FROM nginx:latest
+
+# Copy the static website files from the previous stage
+COPY --from=git /app /usr/share/nginx/html
+
+# Expose port 80, which is the default for HTTP
+EXPOSE 80
+
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
